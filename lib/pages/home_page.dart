@@ -1,10 +1,32 @@
-import 'package:flutter/material.dart';
+import 'dart:async';//timer countdown
+import 'package:flutter/material.dart';//
+import 'package:carousel_slider/carousel_slider.dart' ;// caroseal slider
+import 'package:http/http.dart'as http;// ambil data json
+import 'dart:convert';//decode json
+import 'package:geolocator/geolocator.dart';//gps
+import 'package:geocoding/geocoding.dart';//konversi gps
+import 'package:intl/intl.dart';//formater number
+import 'package:permission_handler/permission_handler.dart';// izin handler
+import 'package:shared_preferences/shared_preferences.dart';// cache lokal
+import 'package:string_similarity/string_similarity.dart';//fuzzy match string  
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  final posterList = const <String> [
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
 
+class _HomePageState extends State<HomePage> {
+  final CarouselController _controller = CarouselController();
+  int _currentIndex = 0;
+
+  
+  final posterList = const <String> [
+    'assets/images/ramadhan-kareem.png',
+    'assets/images/odl-fitr.png',
+    'assets/images/idl/idl-adh.png',
+    'bg'
   ];
 
   @override
@@ -118,10 +140,31 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
+            //======================================
+            // [CAROUSELSECTION]
+            //======================================
+            _buildCarouselSection(),
           ],
         ),
       ),
     );
   }
+
+  Widget _buildCarouselSection(){
+    return Column(
+      children: [
+        const SizedBox(height: 20,),
+        CarouselSlider.builder(itemCount: posterList.length, 
+        itemBuilder: (context, index, realIndex){
+          final poster = posterList[index];
+          return Container(
+            child: Image.asset(poster),
+          );
+        }, 
+        options: CarouselOptions())
+      ],
+    );
+  }
+  
 }
