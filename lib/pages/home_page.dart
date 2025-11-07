@@ -35,112 +35,10 @@ class _HomePageState extends State<HomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Container(
-                height: 130,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.amber,
-                  borderRadius: BorderRadius.circular(15)
-                ),
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: <Widget>[
-                      InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/ic_menu_doa.png'),
-                                Text(
-                                  'Doa dan Dzikir',
-                                  style: TextStyle(
-                                    fontFamily: 'PoppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                                            InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/ic_menu_zakat.png'),
-                                Text(
-                                  'Zakat',
-                                  style: TextStyle(
-                                    fontFamily: 'PoppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                                            InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/ic_menu_jadwal_sholat.png'),
-                                Text(
-                                  'Jadwal SHolat',
-                                  style: TextStyle(
-                                    fontFamily: 'PoppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                                            InkWell(
-                        onTap: () {},
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Image.asset('assets/images/ic_menu_video_kajian.png'),
-                                Text(
-                                  'Video kajian',
-                                  style: TextStyle(
-                                    fontFamily: 'PoppinsRegular',
-                                    color: Colors.white,
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
+            //======================================
+            // [MENU SECTION]
+            //======================================
+            Widget_buildmenuGridSection(),
             //======================================
             // [CAROUSELSECTION]
             //======================================
@@ -150,7 +48,64 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
-
+//===========================
+// [MENU ITEM WIDGET]
+//===========================
+Widget _buildMenuItem(
+  String iconPath, 
+  String title, 
+  String routName,
+  ) {
+  return Column(
+    children: [
+      Image.asset(iconPath, width: 35,),
+      Text(title)
+    ],
+  );
+}
+//===========================
+// [MENU GRID SECTION WIDGET]
+//===========================
+Widget_buildmenuGridSection(){
+  return Padding(
+    padding: const EdgeInsets.all(8.0),
+    child: GridView.count(
+      crossAxisCount: 4,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      children: [
+        _buildMenuItem(
+          'assets/images/ic_menu_doa.png',
+          'Doa Harian',
+          '/doa'
+        ),
+        _buildMenuItem(
+          'assets/images/ic_menu_zakat.png',
+          'Doa Harian',
+          '/doa'
+        ),
+        _buildMenuItem(
+          'assets/images/ic_menu_doa.png',
+          'Doa Harian',
+          '/doa'
+        ),
+        _buildMenuItem(
+          'assets/images/ic_menu_doa.png',
+          'Doa Harian',
+          '/doa'
+        ),
+        _buildMenuItem(
+          'assets/images/ic_menu_doa.png',
+          'Doa Harian',
+          '/doa'
+        ),
+      ],
+    ),
+  );
+}
+//===========================
+// [CAROUSEL SECTION WIDGET]
+//===========================
   Widget _buildCarouselSection(){
     return Column(
       children: [
@@ -159,12 +114,54 @@ class _HomePageState extends State<HomePage> {
         itemBuilder: (context, index, realIndex){
           final poster = posterList[index];
           return Container(
-            child: Image.asset(poster),
+            margin: EdgeInsets.all(20),
+            child: ClipRRect(
+              borderRadius: BorderRadiusGeometry.circular(20),
+              child: Image.asset(
+                poster,
+                width: double.infinity,
+                fit: BoxFit.fitWidth,
+              ),
+            ),
           );
         }, 
-        options: CarouselOptions())
+        options: CarouselOptions(
+          autoPlay: true,
+          height: 270,
+          enlargeCenterPage: true,
+          viewportFraction: 0.7,
+          onPageChanged: (index, reason) {
+            setState(() => _currentIndex =index);
+          },
+          ),
+        ),
+
+        // DOR INDIKATOR CAROUSEL
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children:  posterList.asMap().entries.map((entry){
+            return GestureDetector(
+              onTap: () =>  _currentIndex.animatedToPage(entry.key),
+              child: Container(
+                width: 10,
+                height: 10,
+                margin: EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _currentIndex == entry.key ?
+                  Colors.amberAccent :
+                  Colors.grey[400],
+                ),
+              ),
+            );
+          }).toList(),
+        )
       ],
     );
   }
   
+}
+
+extension on int {
+  void animatedToPage(int key) {}
 }
