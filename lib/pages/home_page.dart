@@ -21,6 +21,11 @@ class _HomePageState extends State<HomePage> {
   final CarouselController _controller = CarouselController();
   int _currentIndex = 0;
 
+  final PoppinsRegular = TextStyle(fontFamily: 'PoppinsRegular');
+  final PoppinsMedium = TextStyle(fontFamily: 'PoppinsMedium');
+  final PoppinsBold = TextStyle(fontFamily: 'PoppinsBold');
+  final Popinsstyregular = TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13, color: Colors.black);
+
   
   final posterList = const <String> [
     'assets/images/ramadhan-kareem.png',
@@ -31,22 +36,93 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            //======================================
-            // [MENU SECTION]
-            //======================================
-            Widget_buildmenuGridSection(),
-            //======================================
-            // [CAROUSELSECTION]
-            //======================================
-            _buildCarouselSection(),
-          ],
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              //======================================
+              // [MENU WAKTU SHOLAY BY LOKASI]
+              //======================================
+              _buildHeroSection(),
+        
+              //======================================
+              // [MENU SECTION]
+              //======================================
+              Widget_buildmenuGridSection(),
+              //======================================
+              // [CAROUSELSECTION]
+              //======================================
+              _buildCarouselSection(),
+            ],
+          ),
         ),
       ),
     );
   }
+
+//===========================
+// [MENU HERO WIDGET]
+//===========================
+Widget _buildHeroSection(){
+  return Stack(
+    clipBehavior: Clip.none,
+    children: [
+      Container(
+        width: double.infinity,
+        height: 290,
+        decoration: BoxDecoration(
+        color: Color(0xFFB3E5FC),
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        ),
+        image: DecorationImage(image: 
+        AssetImage(
+          'assets/images/bg_afternoon.png',
+          ),
+          fit: BoxFit.cover,
+          ),
+        ),
+        
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 20, 
+            vertical: 20
+            ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Assalamu\'alaikum ',
+              style: TextStyle(fontFamily: 
+              'PoppinsRegular',
+                fontSize: 16, 
+                color: Colors.white70,
+                ),
+              ),
+              Text('Ngargoyoso',style: TextStyle(
+                fontFamily: 
+                'PoppingSemiBold', 
+                fontSize: 22, 
+                color: Colors.white
+                ),
+              ),
+              Text(DateFormat('HH:mm')
+              .format(DateTime.now()),
+              style: TextStyle(
+                fontFamily: 'PoppinsBold',
+                fontSize: 50,
+                height: 1.2,
+                color: Colors.white,
+              ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ],
+  );
+}
 //===========================
 // [MENU ITEM WIDGET]
 //===========================
@@ -55,35 +131,40 @@ Widget _buildMenuItem(
   String title, 
   String routName,
   ) {
-  return InkWell(
-    onTap: () {
-      
-    },
-    child: Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ]
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Image.asset(iconPath, width: 35,),
-          const SizedBox(height: 6,),
-          Text(
-            title, 
-            style: TextStyle(
-            fontFamily: 
-            'PoppinsRegular', 
-            fontSize: 13,
-            ),)
-        ],
+  return Material(
+    color: Colors.transparent,
+    child: InkWell(
+      onTap: () {
+        Navigator.pushNamed(context, routName);
+      },
+      borderRadius: BorderRadius.circular(12),
+      splashColor: Colors.amber.withOpacity(0.2),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 4,
+              offset: const Offset(0, 2),
+            ),
+          ]
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(iconPath, width: 35,),
+            const SizedBox(height: 6,),
+            Text(
+              title, 
+              style: TextStyle(
+              fontFamily: 
+              'PoppinsRegular', 
+              fontSize: 13,
+              ),)
+          ],
+        ),
       ),
     ),
   );
@@ -95,8 +176,10 @@ Widget_buildmenuGridSection(){
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: GridView.count(
-      crossAxisCount: 4,
+      crossAxisCount: 4, // maksimal 4 baris
       shrinkWrap: true,
+      mainAxisSpacing: 16,
+      crossAxisSpacing: 16,
       physics: const NeverScrollableScrollPhysics(),
       children: [
         _buildMenuItem(
@@ -118,6 +201,11 @@ Widget_buildmenuGridSection(){
           'assets/images/ic_menu_jadwal_sholat.png',
           'Jadwal Sholat',
           '/sholat'
+        ),
+        _buildMenuItem(
+          'assets/images/ic_menu_doa.png',
+          'Khutbah',
+          '/khutbah'
         ),
       ],
     ),
