@@ -20,6 +20,31 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final CarouselController _controller = CarouselController();
   int _currentIndex = 0;
+  bool _isLoading = true;
+  Duration? _timeRemaining;
+  Timer? _countdownTimer;
+  String _location = "Mengambil lokasi.....";
+  String _prayTime = "Loading....";
+  String _backgroundImage = 'assets/images/bg_morning.png';
+  List<dynamic>? _jadwalSholat;
+
+  final posterList = const <String> [
+    'assets/images/ramadhan-kareem.png',
+    'assets/images/idl-adh.png',
+    'assets/images/idl-fitr.png',
+  ];
+
+  String _formatDuration(Duration d) {
+    final hours = d.inHours;
+    final minute = d.inMinutes.remainder(60);
+    return "$hours jam $minute menit lagi";
+  }
+
+  // state untuk dijalankan diawal
+  @override
+  void initState() {
+    super.initState();
+  }
 
   final PoppinsRegular = TextStyle(fontFamily: 'PoppinsRegular');
   final PoppinsMedium = TextStyle(fontFamily: 'PoppinsMedium');
@@ -27,11 +52,16 @@ class _HomePageState extends State<HomePage> {
   final Popinsstyregular = TextStyle(fontFamily: 'PoppinsRegular', fontSize: 13, color: Colors.black);
 
   
-  final posterList = const <String> [
-    'assets/images/ramadhan-kareem.png',
-    'assets/images/idl-adh.png',
-    'assets/images/idl-fitr.png',
-  ];
+
+  Future _getBackgroundImage(DateTime now) async {
+    if (now.hour < 12) {
+      return 'assets/images/bg_morning.png';
+    } else if (now.hour < 18){
+      return 'assets/images/ng_afternoon.png';
+    } 
+
+    return 'assets/images/bg_night (1).png';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +74,7 @@ class _HomePageState extends State<HomePage> {
               // [MENU WAKTU SHOLAY BY LOKASI]
               //======================================
               _buildHeroSection(),
+              const SizedBox(height: 65,),
         
               //======================================
               // [MENU SECTION]
@@ -116,6 +147,67 @@ Widget _buildHeroSection(){
                 color: Colors.white,
               ),
               ),
+            ],
+          ),
+        ),
+      ),
+
+      //=====================
+      // [WAKTU SHOLAT SELANJUTNYA]
+      //=====================
+      Positioned(
+        bottom: -55,
+        left: 20,
+        right: 20,
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 2,
+                offset: Offset(0, 4),
+                color: Colors.amber.withOpacity(0.4),
+              ),
+            ],
+          ),
+          padding: EdgeInsets.symmetric(
+            vertical: 16,
+            horizontal: 14,
+          ),
+          child: Column(
+            children: [
+              Text('Waktu sholat selanjutnya',
+              style: TextStyle(
+                fontFamily: 'PoppinsRegular',
+                fontSize: 14,
+                color: Colors.grey,
+                ),
+              ),
+              Text(
+                'ASHAR',
+                style: TextStyle(
+                  fontFamily: 'PoppinsBold',
+                  fontSize: 20,
+                  color: Colors.amber
+                ),
+              ),
+              Text(
+                '14:22',
+                style: TextStyle(
+                  fontFamily: 'PoppinsBold',
+                  fontSize: 28,
+                  color: Colors.black38,
+                ),
+              ),
+              Text(
+                '5 jam 10 Menit',
+                style: TextStyle(
+                  fontFamily: 'PoppinsRegular',
+                  fontSize: 13,
+                  color: Colors.grey,
+                ),
+              )
             ],
           ),
         ),
