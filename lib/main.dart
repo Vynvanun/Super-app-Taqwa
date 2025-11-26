@@ -1,8 +1,13 @@
 import 'dart:io';
 
+import 'package:bitaqwa/pages/doa_page.dart';
 import 'package:bitaqwa/pages/home_page.dart';
+import 'package:bitaqwa/pages/kajian_page.dart';
+import 'package:bitaqwa/pages/sholat_page.dart';
+import 'package:bitaqwa/pages/zakat_page.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
+
 
 void main() async {
   /// 🔹 Pastikan Flutter sudah siap sebelum menjalankan async
@@ -43,6 +48,10 @@ class MyApp extends StatelessWidget {
         // '/' nama route dari halaman HomePage()
         // '/zakat' nama route dari halaman Zakat 
         '/': (context) => HomePage(),
+        '/doa-harian' : (context) => DoaPage(),
+        '/zakat' : (context) => ZakatPage(),
+        '/sholat' : (context) => SholatPage(),
+        '/kajian' : (context) => KajianPage(),
       },
     );
     

@@ -285,7 +285,7 @@ class _DoaPageState extends State<DoaPage> {
                 ),
               ),
             const SizedBox(height: 8),
- 
+
             // Referensi
             if (doa['reference'] != null)
               Text(
